@@ -1,6 +1,5 @@
 package Catalog;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Catalog {
@@ -15,7 +14,7 @@ public class Catalog {
             listOfGrades = grades.get(iStudent).get(key);
 
             for (Integer grade : listOfGrades) {
-                System.out.printf(grade + " ");
+                System.out.print(grade + " ");
             }
             System.out.println();
         }

@@ -87,8 +87,6 @@ public class Sistem {
                     clasa = scanner.nextClasa();
                     student = new Student(lastName, firstName, bDay, clasa);
                     manager.getClasa(clasa).addStudent(student);
-                    // TODO debug shit
-                    manager.getClasa(clasa).showStudents();
                     break;
 
                 case 3:

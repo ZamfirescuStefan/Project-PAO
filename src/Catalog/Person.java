@@ -1,6 +1,5 @@
 package Catalog;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Person implements Comparable{
