@@ -5,7 +5,7 @@ import java.util.Date;
 public class Professor extends Person{
     private Integer salary;
 
-    public Professor(String iFirstName, String iLastName, Date iBirthDate, Integer salary) {
+    public Professor(String iFirstName, String iLastName, Data iBirthDate, Integer salary) {
         super(iFirstName, iLastName, iBirthDate);
         this.salary = salary;
     }

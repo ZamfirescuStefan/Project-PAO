@@ -6,11 +6,13 @@ import java.lang.Object;
 public class Clasa {
     private String name;
     private Integer id;
-    public Set<Student> students = new TreeSet<Student>();
-    public ArrayList<Subject> subjects = new ArrayList<Subject>();  // all subjects that are taught in a class
+    public Set<Student> students;
+    public ArrayList<Subject> subjects; // all subjects that are taught in a class
     private Catalog catalog = new Catalog(); // stores all notes for every student
 
     public Clasa(Integer iId, String iName) {
+        students = new TreeSet<>();
+        subjects = new ArrayList<>();
         name = iName;
         id = iId;
     }
@@ -70,7 +72,7 @@ public class Clasa {
         return null;
     }
 
-    public void addGrade(Student iStudent, AllSubjects iSubject, Integer iGrade) {
+    public void addGrade(Student iStudent, AllSubjects iSubject, Nota iNota) {
         Subject subject = null;
         for (Subject item : subjects) {
             if (item.getSubject() == iSubject)
@@ -79,7 +81,7 @@ public class Clasa {
         if (subject == null)
             System.out.println("This subject not exist");
         else
-            catalog.addNote(iStudent, subject, iGrade);
+            catalog.addNote(iStudent, subject, iNota);
     }
 
     @Override
@@ -108,6 +110,11 @@ public class Clasa {
         for (Subject subject : subjects) {
             System.out.println(subject);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Clasa " + id + " " + name;
     }
 
     public  void calcAverage (Student iStudent, Subject iSubject) {

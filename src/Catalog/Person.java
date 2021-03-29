@@ -5,9 +5,9 @@ import java.util.Date;
 public class Person implements Comparable{
     protected String mFistName;
     protected String mLastName;
-    protected Date mBirthDate;
+    protected Data mBirthDate;
 
-    public Person (String iFirstName, String iLastName, Date iBirthDate){
+    public Person (String iFirstName, String iLastName, Data iBirthDate){
         mFistName = iFirstName;
         mLastName = iLastName;
         mBirthDate = iBirthDate;
@@ -29,11 +29,11 @@ public class Person implements Comparable{
         this.mLastName = mLastName;
     }
 
-    public Date getmBirthDate() {
+    public Data getmBirthDate() {
         return mBirthDate;
     }
 
-    public void setmBirthDate(Date mBirthDate) {
+    public void setmBirthDate(Data mBirthDate) {
         this.mBirthDate = mBirthDate;
     }
 

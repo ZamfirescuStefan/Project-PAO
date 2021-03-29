@@ -3,18 +3,28 @@ package Catalog;
 import java.util.ArrayList;
 
 public class Manager {
-    public ArrayList <Clasa> classes = new ArrayList<Clasa>();
-    public ArrayList <Professor> professors = new ArrayList<Professor>();
+    private final ArrayList <Clasa> classes;
+    private final ArrayList <Professor> professors;
 
     private static Manager manager = null;
     private Manager ()
     {
+        classes = new ArrayList<>();
+        professors = new ArrayList<>();
     }
 
     public static Manager getInstance () {
         if (manager == null)
             manager = new Manager();
         return  manager;
+    }
+
+    public ArrayList <Clasa> getClasses () {
+        return classes;
+    }
+
+    public ArrayList <Professor> getProfessors () {
+        return professors;
     }
 
     public void addClasa (Clasa iClasa) {

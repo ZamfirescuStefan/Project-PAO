@@ -6,6 +6,7 @@ enum AllSubjects {
     Informatica,
     Istorie,
     Geografie,
+    Biologie
 }
 public class Subject { // an object that stores for an professor what subject he teaches
     private Professor professor;
