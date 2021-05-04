@@ -109,21 +109,6 @@ public class Clasa {
         return Objects.hash(name, id);
     }
 
-    public void showGrades(Student iStudent) {
-        catalog.showGrades(iStudent);
-    }
-
-    public void showStudents() {
-        for (Student student : students)
-            System.out.println(student);
-    }
-
-    public void showSubjects () {
-        for (Subject subject : subjects) {
-            System.out.println(subject);
-        }
-    }
-
     @Override
     public String toString() {
         return "Clasa " + id + " " + name;

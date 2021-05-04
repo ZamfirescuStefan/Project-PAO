@@ -16,9 +16,9 @@ public class LogCSV {
     private static FileWriter csvWriter = null;
     public static LogCSV getInstance() throws IOException {
         if (log_instance == null)
-            return new LogCSV();
-        else
-            return log_instance;
+            log_instance = new LogCSV();
+
+        return log_instance;
     }
 
     public static void Log(String message) throws IOException {

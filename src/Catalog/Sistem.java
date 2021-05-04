@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -38,7 +39,7 @@ public class Sistem {
         Scanner scanner = new Scanner(System.in);
         WriteCSV writeCSV = WriteCSV.getInstance();
         LogCSV logCSV = LogCSV.getInstance();
-
+        ClasaService clasaService = ClasaService.getInstance();
         while (true) {
             System.out.println("Choose an option:");
             System.out.println("1) Add a new class");
@@ -107,9 +108,9 @@ public class Sistem {
                     grade = scanner.nextInt();
                     nota = grade;
 
-                    student = manager.getClasa(clasa).getStudent(lastName, firstName);
-                    manager.getClasa(clasa).addGrade(student, subj, nota);
-                    manager.getClasa(clasa).showGrades(student);
+                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
+                    clasaService.addGrade(manager.getClasa(clasa), student, subj, nota);
+                    clasaService.showGrades(manager.getClasa(clasa), student);
                     LogCSV.Log("Add grade");
                     break;
 
@@ -117,7 +118,7 @@ public class Sistem {
                     System.out.println("     ----- Show Students -----");
                     clasa = readClasa();
                     System.out.println("The students are:");
-                    manager.getClasa(clasa).showStudents();
+                    clasaService.showStudents(manager.getClasa(clasa));
                     LogCSV.Log("Show students");
                     break;
 
@@ -131,7 +132,7 @@ public class Sistem {
                 case 7:
                     System.out.println("     ----- Show Subjects ------");
                     clasa = readClasa();
-                    manager.getClasa(clasa).showSubjects();
+                    clasaService.showSubjects(manager.getClasa(clasa));
                     LogCSV.Log("Show subjects");
 
                     break;
@@ -143,8 +144,8 @@ public class Sistem {
                     System.out.println("Enter the first name:");
                     firstName = scanner.next();
                     clasa = readClasa();
-                    student = manager.getClasa(clasa).getStudent(lastName, firstName);
-                    manager.getClasa(clasa).showGrades(student);
+                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
+                    clasaService.showGrades(manager.getClasa(clasa), student);
                     LogCSV.Log("Show grades for a student");
 
                     break;
@@ -157,7 +158,7 @@ public class Sistem {
                     System.out.println("Enter the first name for the student");
                     firstName = scanner.next();
                     clasa = readClasa();
-                    student = manager.getClasa(clasa).getStudent(lastName, firstName);
+                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
                     manager.getClasa(clasa).getCatalog().showAllGrades(student);
                     LogCSV.Log("Show all graders for a student");
 
@@ -191,6 +192,7 @@ public class Sistem {
     }
     void initValues (Manager manager) {
         Reading reading = Reading.getInstance();
+        ClasaService clasaService = ClasaService.getInstance();
 
         ArrayList<Clasa> clasa_list = reading.readClasa();
         for (Clasa clasa : clasa_list)
@@ -215,7 +217,7 @@ public class Sistem {
                 String tmp_name = data[1];
                 Clasa tmp_clasa = manager.getClasaByName(tmp_id, tmp_name);
                 Professor tmp_prof = manager.getProfessor(data[3], data[2]);
-                tmp_clasa.addSubjects(tmp_prof, AllSubjects.valueOf(data[4]));
+                clasaService.addSubjects(tmp_clasa, tmp_prof, AllSubjects.valueOf(data[4]));
 
             }
             csvReader.close();

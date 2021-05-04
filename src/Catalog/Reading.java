@@ -12,9 +12,8 @@ public class Reading {
     private static Reading reading_instance = null;
     public static Reading getInstance() {
         if (reading_instance == null)
-            return new Reading();
-        else
-            return reading_instance;
+            reading_instance =  new Reading();
+        return reading_instance;
     }
 
     public ArrayList<Professor> readProfessors() {

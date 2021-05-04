@@ -11,9 +11,9 @@ public class WriteCSV {
     private static WriteCSV write_instance = null;
     public static WriteCSV getInstance() {
         if (write_instance == null)
-            return new WriteCSV();
-        else
-            return write_instance;
+            write_instance = new WriteCSV();
+
+        return write_instance;
     }
 
     public void writeClase(){
