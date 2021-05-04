@@ -1,7 +1,5 @@
 package Catalog;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,20 +190,20 @@ public class Sistem {
         }
     }
     void initValues (Manager manager) {
-        Reading reading = Reading.getInstance();
+        ReadCSV readCSV = ReadCSV.getInstance();
         ClasaService clasaService = ClasaService.getInstance();
         ManagerService managerService = ManagerService.getInstance();
 
-        ArrayList<Clasa> clasa_list = reading.readClasa();
+        ArrayList<Clasa> clasa_list = readCSV.readClasa();
         for (Clasa clasa : clasa_list)
             managerService.addClasa(manager, clasa);
 
-        ArrayList<Professor> professor_list = reading.readProfessors();
+        ArrayList<Professor> professor_list = readCSV.readProfessors();
         for (Professor prof : professor_list)
             managerService.addProfessor(manager, prof);
 
-        ArrayList<Student> student_list = reading.readStudent();
-        ArrayList<Subject> readSubject = reading.readSubject();
+        ArrayList<Student> student_list = readCSV.readStudent();
+        ArrayList<Subject> readSubject = readCSV.readSubject();
 
 
     }

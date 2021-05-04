@@ -6,15 +6,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-public class Reading {
-    private static Reading reading_instance = null;
-    public static Reading getInstance() {
-        if (reading_instance == null)
-            reading_instance =  new Reading();
-        return reading_instance;
+public class ReadCSV {
+    private static ReadCSV readCSV_instance = null;
+    public static ReadCSV getInstance() {
+        if (readCSV_instance == null)
+            readCSV_instance =  new ReadCSV();
+        return readCSV_instance;
     }
 
     public ArrayList<Professor> readProfessors() {

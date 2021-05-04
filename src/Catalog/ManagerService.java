@@ -1,7 +1,4 @@
 package Catalog;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-
 public class ManagerService {
     private static ManagerService instance = null;
 
