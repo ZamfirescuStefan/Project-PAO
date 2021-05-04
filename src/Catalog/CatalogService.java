@@ -2,8 +2,8 @@ package Catalog;
 
 import java.util.*;
 
-public class Catalog {
-    private Map<Student, Map<Subject, ArrayList <Nota>> > grades;
+public class CatalogService {
+    private Map<Student, Map<Subject, ArrayList <Integer>> > grades;
 
     public CatalogService() {
         grades = new HashMap<>();
@@ -47,15 +47,15 @@ public class Catalog {
     }
     public Double calcAverage (Student iStudent, Subject iSubject) {
         try{
-           ArrayList<Nota> listOfNotes = grades.get(iStudent).get(iSubject);
-           Integer sum  = 0;
-           for (Nota grade : listOfNotes) {
-               sum += grade.getNota();
+           ArrayList<Integer> listOfNotes = grades.get(iStudent).get(iSubject);
+           double sum  = 0;
+           for (Integer grade : listOfNotes) {
+               sum += grade;
            }
            return sum/listOfNotes.size();
         }
         catch (Exception e ) {
-            return  null;
+            return  -1.0;
         }
     }
 

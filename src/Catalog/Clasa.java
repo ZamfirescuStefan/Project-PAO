@@ -61,41 +61,6 @@ public class Clasa {
         subjects = iSubjects;
     }
 
-    public void addSubjects(Professor iProfessor, AllSubjects iSubj) {
-
-        Boolean existSubj = false;
-        for (Subject item : subjects) {
-            if (item.getSubject() == iSubj) {
-                existSubj = true;
-                break;
-            }
-        }
-        if (!existSubj) {
-            Subject sub = new Subject(iProfessor, iSubj);
-            subjects.add(sub);
-        }
-
-    }
-
-    public Student getStudent(String iLastName, String iFirstName) {
-        for (Student student : students)
-            if (student.getmFistName().equals(iFirstName) && student.getmLastName().equals(iLastName))
-                return student;
-        return null;
-    }
-
-    public void addGrade(Student iStudent, AllSubjects iSubject, Nota iNota) {
-        Subject subject = null;
-        for (Subject item : subjects) {
-            if (item.getSubject() == iSubject)
-                subject = item;
-        }
-        if (subject == null)
-            System.out.println("This subject not exist");
-        else
-            catalog.addNote(iStudent, subject, iNota);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,10 +77,6 @@ public class Clasa {
     @Override
     public String toString() {
         return "Clasa " + id + " " + name;
-    }
-
-    public  void calcAverage (Student iStudent, Subject iSubject) {
-        catalog.calcAverage(iStudent, iSubject);
     }
 
 }
