@@ -3,8 +3,8 @@ package Catalog;
 import java.util.ArrayList;
 
 public class Manager {
-    private final ArrayList <Clasa> classes;
-    private final ArrayList <Professor> professors;
+    private static ArrayList <Clasa> classes;
+    private static ArrayList <Professor> professors;
 
     private static Manager manager = null;
     private Manager ()
@@ -27,21 +27,16 @@ public class Manager {
         return professors;
     }
 
-    public void addClasa (Clasa iClasa) {
-        classes.add(iClasa);
-    }
+    public void showProfessors () {
 
-    public void addProfessor (Professor prof) {
-        professors.add(prof);
-    }
-
-    public Clasa getClasa (Integer iId, String iName) {
-        for (Clasa clasa : classes) {
-            if (clasa.getName().equals(iName) && clasa.getId().equals(iId))
-                return  clasa;
+        int index = 1;
+        for(Professor professor : professors) {
+            System.out.println(index + ") " + professor);
+            index += 1;
         }
-        return null;
+        System.out.println();
     }
+
     public Clasa getClasa(Clasa iClasa) {
         for (Clasa clasa: classes) {
             if (clasa.equals(iClasa))
@@ -49,25 +44,4 @@ public class Manager {
         }
         return  null;
     }
-    public Professor getProfessor(String iLastName, String iFirstName){
-        for (Professor prof : professors)
-            if (prof.getmLastName().equals(iLastName) && prof.getmFistName().equals(iFirstName))
-                return prof;
-        return null;
-    }
-
-    public Clasa getClasaByName(Integer id, String name) {
-        for (Clasa clasa: classes)
-            if (clasa.getId().equals(id) && clasa.getName().equals(name))
-                return  clasa;
-        return null;
-    }
-    public void showProfessors () {
-        for(Professor professor : professors) {
-            System.out.println(professor);
-        }
-    }
-
-
-
 }

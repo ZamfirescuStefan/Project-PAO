@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -40,6 +39,8 @@ public class Sistem {
         WriteCSV writeCSV = WriteCSV.getInstance();
         LogCSV logCSV = LogCSV.getInstance();
         ClasaService clasaService = ClasaService.getInstance();
+        ManagerService managerService = ManagerService.getInstance();
+
         while (true) {
             System.out.println("Choose an option:");
             System.out.println("1) Add a new class");
@@ -61,7 +62,7 @@ public class Sistem {
                 case 1:
                     System.out.println("     ----- Add a new class -----");
                     clasa = readClasa();
-                    manager.addClasa(clasa);
+                    managerService.addClasa(manager, clasa);
                     LogCSV.Log("Add a new class");
                     break;
                 case 2:
@@ -91,7 +92,7 @@ public class Sistem {
                     System.out.println("Enter the salary: ");
                     salary = scanner.nextInt();
                     teacher = new Professor(lastName, firstName, bDay, salary);
-                    manager.addProfessor(teacher);
+                    managerService.addProfessor(manager, teacher);
                     LogCSV.Log("Add a new teacher");
                     break;
 
@@ -193,37 +194,19 @@ public class Sistem {
     void initValues (Manager manager) {
         Reading reading = Reading.getInstance();
         ClasaService clasaService = ClasaService.getInstance();
+        ManagerService managerService = ManagerService.getInstance();
 
         ArrayList<Clasa> clasa_list = reading.readClasa();
         for (Clasa clasa : clasa_list)
-            manager.addClasa(clasa);
+            managerService.addClasa(manager, clasa);
 
         ArrayList<Professor> professor_list = reading.readProfessors();
         for (Professor prof : professor_list)
-            manager.addProfessor(prof);
+            managerService.addProfessor(manager, prof);
 
         ArrayList<Student> student_list = reading.readStudent();
+        ArrayList<Subject> readSubject = reading.readSubject();
 
-//         Materiile pentru fiecare clasa
-        try {
-            BufferedReader csvReader = new BufferedReader(new FileReader(
-                    "/Users/stefanzamfirescu/CollageProjects/Project-PAO/src/Catalog/CSV_file/SubjectsForClasses.csv"));
-            String row;
-            row = csvReader.readLine();
-            while ((row = csvReader.readLine()) != null) {
-                String[] data = row.split(",");
-
-                Integer tmp_id = Integer.valueOf(data[0]);
-                String tmp_name = data[1];
-                Clasa tmp_clasa = manager.getClasaByName(tmp_id, tmp_name);
-                Professor tmp_prof = manager.getProfessor(data[3], data[2]);
-                clasaService.addSubjects(tmp_clasa, tmp_prof, AllSubjects.valueOf(data[4]));
-
-            }
-            csvReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 }

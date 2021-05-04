@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Reading {
@@ -36,9 +37,7 @@ public class Reading {
                 professors_list.add(tmp_professor);
             }
             csvReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         return professors_list;
@@ -70,6 +69,7 @@ public class Reading {
     public ArrayList<Student> readStudent() {
         ArrayList<Student> student_list = new ArrayList<>();
         Manager manager = Manager.getInstance();
+        ManagerService managerService = ManagerService.getInstance();
         try {
             BufferedReader csvReader = new BufferedReader(new FileReader(
                     "/Users/stefanzamfirescu/CollageProjects/Project-PAO/src/Catalog/CSV_file/Students.csv"));
@@ -80,7 +80,7 @@ public class Reading {
 
                 Date tmp_bday = new Date(data[2]);
                 Integer tmp_id = Integer.valueOf(data[3]);
-                Clasa tmp_clasa = manager.getClasaByName(tmp_id, data[4]);
+                Clasa tmp_clasa = managerService.getClasaByName(manager, tmp_id, data[4]);
                 Student tmp_student = new Student(data[0], data[1], tmp_bday, tmp_clasa);
                 student_list.add(tmp_student);
             }
@@ -91,27 +91,31 @@ public class Reading {
         return student_list;
     }
 
-//    public ArrayList<Subject> readSubject() {
-//        ArrayList<Subject> subject_list = new ArrayList<>();
-//        Manager manager = Manager.getInstance();
-//        try {
-//            BufferedReader csvReader = new BufferedReader(new FileReader(
-//                    "/Users/stefanzamfirescu/CollageProjects/Project-PAO/src/Catalog/CSV_file/SubjectsForClasses.csv"));
-//            String row;
-//            row = csvReader.readLine();
-//            while ((row = csvReader.readLine()) != null) {
-//                String[] data = row.split(",");
-//
-//                Integer tmp_id = Integer.valueOf(data[0]);
-//                String tmp_name = data[1];
-//                Clasa tmp_clasa = manager.getClasaByName(tmp_id, tmp_name);
-//                Professor tmp_prof = manager.getProfessor(data[3], data[2]);
-//                tmp_clasa.addSubjects(tmp_prof, AllSubjects.valueOf(data[4]));
-//
-//            }
-//            csvReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public ArrayList<Subject> readSubject() {
+        ArrayList<Subject> subject_list = new ArrayList<>();
+        Manager manager = Manager.getInstance();
+        ManagerService managerService = ManagerService.getInstance();
+        ClasaService clasaService = ClasaService.getInstance();
+
+        try {
+            BufferedReader csvReader = new BufferedReader(new FileReader(
+                    "/Users/stefanzamfirescu/CollageProjects/Project-PAO/src/Catalog/CSV_file/SubjectsForClasses.csv"));
+            String row;
+            row = csvReader.readLine();
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+
+                Integer tmp_id = Integer.valueOf(data[0]);
+                String tmp_name = data[1];
+                Clasa tmp_clasa = managerService.getClasaByName(manager, tmp_id, tmp_name);
+                Professor tmp_prof = managerService.getProfessor(manager, data[3], data[2]);
+                clasaService.addSubjects(tmp_clasa, tmp_prof, AllSubjects.valueOf(data[4]));
+
+            }
+            csvReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return subject_list;
+    }
 }

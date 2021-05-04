@@ -9,14 +9,22 @@ public class ClasaService {
     }
 
     public void showStudents(Clasa cls) {
-        for (Student student : cls.getStudents())
-            System.out.println(student);
+        int index = 1;
+        for (Student student : cls.getStudents()) {
+            System.out.println(index + ") " + student);
+            index += 1;
+        }
+        System.out.println();
     }
 
     public void showSubjects (Clasa cls) {
+        int index = 1;
+        System.out.println("The subjects for " + cls.getId() + cls.getName() + " are: " );
         for (Subject subject : cls.getSubjects()) {
-            System.out.println(subject);
+            System.out.println(index + ") " + subject);
+            index += 1;
         }
+        System.out.println();
     }
 
     public void showGrades(Clasa cls,Student iStudent) {
