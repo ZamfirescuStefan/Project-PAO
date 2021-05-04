@@ -1,5 +1,8 @@
 package Catalog;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -19,20 +22,22 @@ public class Sistem {
     Sistem() {
     }
 
-    public void menu() {
+    public void menu() throws IOException {
         Manager manager = Manager.getInstance();
         Student student;
         String lastName;
         String firstName;
-        Data bDay;
+        Date bDay;
         Clasa clasa;
         Professor teacher;
         Integer salary, grade;
-        Nota nota;
+        Integer nota;
         int chosen;
 
         initValues(manager);
         Scanner scanner = new Scanner(System.in);
+        WriteCSV writeCSV = WriteCSV.getInstance();
+        LogCSV logCSV = LogCSV.getInstance();
 
         while (true) {
             System.out.println("Choose an option:");
@@ -56,35 +61,37 @@ public class Sistem {
                     System.out.println("     ----- Add a new class -----");
                     clasa = readClasa();
                     manager.addClasa(clasa);
-
+                    LogCSV.Log("Add a new class");
                     break;
                 case 2:
                     System.out.println("     ----- Add a new student -----");
 
                     System.out.println("Enter the last name for the student");
                     lastName = scanner.next();
-                    System.out.println("Enter the last name for the student");
+                    System.out.println("Enter the first name for the student");
                     firstName = scanner.next();
                     System.out.println("Enter the birth date for the student");
-                    bDay = new Data(scanner.next());
+                    bDay = new Date(scanner.next());
                     System.out.println("Enter the class where you want to add the user:");
                     clasa = readClasa();
                     student = new Student(lastName, firstName, bDay, clasa);
                     manager.getClasa(clasa).addStudent(student);
+                    LogCSV.Log("Add a new student");
                     break;
 
                 case 3:
-                    System.out.println("     ----- Add a new teacher in data base -----");
+                    System.out.println("     ----- Add a new teacher -----");
                     System.out.println("Enter the last name:");
                     lastName = scanner.next();
                     System.out.println("Enter the first name: ");
                     firstName = scanner.next();
                     System.out.println("Enter the birth date:");
-                    bDay = new Data(scanner.next());
+                    bDay = new Date(scanner.next());
                     System.out.println("Enter the salary: ");
                     salary = scanner.nextInt();
                     teacher = new Professor(lastName, firstName, bDay, salary);
                     manager.addProfessor(teacher);
+                    LogCSV.Log("Add a new teacher");
                     break;
 
                 case 4:
@@ -98,11 +105,12 @@ public class Sistem {
                     AllSubjects subj = AllSubjects.valueOf(scanner.next());
                     System.out.println("Enter the grade:");
                     grade = scanner.nextInt();
-                    nota = new Nota(grade);
+                    nota = grade;
 
                     student = manager.getClasa(clasa).getStudent(lastName, firstName);
                     manager.getClasa(clasa).addGrade(student, subj, nota);
                     manager.getClasa(clasa).showGrades(student);
+                    LogCSV.Log("Add grade");
                     break;
 
                 case 5:
@@ -110,18 +118,22 @@ public class Sistem {
                     clasa = readClasa();
                     System.out.println("The students are:");
                     manager.getClasa(clasa).showStudents();
+                    LogCSV.Log("Show students");
                     break;
 
                 case 6:
                     System.out.println("     ----- Show Teachers -----");
-                    System.out.println(" List of professors:");
+                    System.out.println("List of professors:");
                     manager.showProfessors();
+                    LogCSV.Log("Show teachers");
                     break;
 
                 case 7:
                     System.out.println("     ----- Show Subjects ------");
                     clasa = readClasa();
                     manager.getClasa(clasa).showSubjects();
+                    LogCSV.Log("Show subjects");
+
                     break;
 
                 case 8:
@@ -133,6 +145,8 @@ public class Sistem {
                     clasa = readClasa();
                     student = manager.getClasa(clasa).getStudent(lastName, firstName);
                     manager.getClasa(clasa).showGrades(student);
+                    LogCSV.Log("Show grades for a student");
+
                     break;
 
                 case 9:
@@ -140,11 +154,13 @@ public class Sistem {
 
                     System.out.println("Enter the last name for the student");
                     lastName = scanner.next();
-                    System.out.println("Enter the last name for the student");
+                    System.out.println("Enter the first name for the student");
                     firstName = scanner.next();
                     clasa = readClasa();
                     student = manager.getClasa(clasa).getStudent(lastName, firstName);
                     manager.getClasa(clasa).getCatalog().showAllGrades(student);
+                    LogCSV.Log("Show all graders for a student");
+
                     break;
 
                 case 10:
@@ -155,9 +171,15 @@ public class Sistem {
                         index++;
                     }
                     System.out.println();
+                    LogCSV.Log("Show all classes");
+
                     break;
 
                 default:
+                    writeCSV.writeClase();
+                    writeCSV.writeProfessors();
+                    writeCSV.writeSubjects();
+                    writeCSV.writeStudents();
                     return;
             }
             }
@@ -168,26 +190,38 @@ public class Sistem {
         }
     }
     void initValues (Manager manager) {
-        Integer initInt = 3500;
-        Data initDate = new Data("02/02/2000");
-        Clasa initClass = new Clasa(11, "C");
-        Clasa initClass2 = new Clasa(12, "F");
-        Student initStudent = new Student("Zamfirescu", "Stefan", initDate, initClass);
-        Professor initProfessor = new Professor("Dumitrascu", "Octavian", initDate, initInt);
-        manager.addClasa(initClass);
-        manager.addClasa(initClass2);
-        ArrayList<Subject> initSubjectList = new ArrayList<>();
-        Subject initSubject = new Subject(initProfessor, AllSubjects.Romana);
-        Subject initSubject1 = new Subject(initProfessor, AllSubjects.Matematica);
-        initSubjectList.add(initSubject);
-        initSubjectList.add(initSubject1);
-        Nota initNota = new Nota(10);
-        Nota initNota1 = new Nota(9);
-        manager.getClasa(initClass).setSubjects(initSubjectList);
-        manager.getClasa(initClass).addGrade(initStudent, initSubject.getSubject(), initNota);
-        manager.getClasa(initClass).addGrade(initStudent, initSubject.getSubject(), initNota1);
-        manager.getClasa(initClass).addGrade(initStudent, AllSubjects.Matematica, initNota);
-        manager.addProfessor(initProfessor);
+        Reading reading = Reading.getInstance();
+
+        ArrayList<Clasa> clasa_list = reading.readClasa();
+        for (Clasa clasa : clasa_list)
+            manager.addClasa(clasa);
+
+        ArrayList<Professor> professor_list = reading.readProfessors();
+        for (Professor prof : professor_list)
+            manager.addProfessor(prof);
+
+        ArrayList<Student> student_list = reading.readStudent();
+
+//         Materiile pentru fiecare clasa
+        try {
+            BufferedReader csvReader = new BufferedReader(new FileReader(
+                    "/Users/stefanzamfirescu/CollageProjects/Project-PAO/src/Catalog/CSV_file/SubjectsForClasses.csv"));
+            String row;
+            row = csvReader.readLine();
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+
+                Integer tmp_id = Integer.valueOf(data[0]);
+                String tmp_name = data[1];
+                Clasa tmp_clasa = manager.getClasaByName(tmp_id, tmp_name);
+                Professor tmp_prof = manager.getProfessor(data[3], data[2]);
+                tmp_clasa.addSubjects(tmp_prof, AllSubjects.valueOf(data[4]));
+
+            }
+            csvReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

@@ -2,12 +2,12 @@ package Catalog;
 
 import java.util.Date;
 
-public class Person implements Comparable{
+public class Person implements Comparable {
     protected String mFistName;
     protected String mLastName;
-    protected Data mBirthDate;
+    protected Date mBirthDate;
 
-    public Person (String iFirstName, String iLastName, Data iBirthDate){
+    public Person (String iFirstName, String iLastName, Date iBirthDate) {
         mFistName = iFirstName;
         mLastName = iLastName;
         mBirthDate = iBirthDate;
@@ -29,11 +29,11 @@ public class Person implements Comparable{
         this.mLastName = mLastName;
     }
 
-    public Data getmBirthDate() {
+    public Date getmBirthDate() {
         return mBirthDate;
     }
 
-    public void setmBirthDate(Data mBirthDate) {
+    public void setmBirthDate(Date mBirthDate) {
         this.mBirthDate = mBirthDate;
     }
 

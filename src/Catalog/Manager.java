@@ -49,6 +49,19 @@ public class Manager {
         }
         return  null;
     }
+    public Professor getProfessor(String iLastName, String iFirstName){
+        for (Professor prof : professors)
+            if (prof.getmLastName().equals(iLastName) && prof.getmFistName().equals(iFirstName))
+                return prof;
+        return null;
+    }
+
+    public Clasa getClasaByName(Integer id, String name) {
+        for (Clasa clasa: classes)
+            if (clasa.getId().equals(id) && clasa.getName().equals(name))
+                return  clasa;
+        return null;
+    }
     public void showProfessors () {
         for(Professor professor : professors) {
             System.out.println(professor);

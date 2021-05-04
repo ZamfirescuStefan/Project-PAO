@@ -8,7 +8,19 @@ public class Clasa {
     private Integer id;
     public Set<Student> students;
     public ArrayList<Subject> subjects; // all subjects that are taught in a class
-    private Catalog catalog = new Catalog(); // stores all notes for every student
+    private CatalogService catalog = new CatalogService(); // stores all notes for every student
+
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
 
     public Clasa(Integer iId, String iName) {
         students = new TreeSet<>();
@@ -29,7 +41,7 @@ public class Clasa {
         return id;
     }
 
-    public Catalog getCatalog() {
+    public CatalogService getCatalog() {
         return catalog;
     }
 
