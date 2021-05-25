@@ -1,8 +1,14 @@
 package Catalog;
 
+import Catalog.Database.Config.SetupData;
+import Catalog.Database.Repository.ProfessorRepository;
+import Catalog.Database.Repository.StudentRepository;
+import Catalog.Database.Repository.SubjectRepository;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Sistem {
@@ -24,7 +30,7 @@ public class Sistem {
         Manager manager = Manager.getInstance();
         Student student;
         String lastName;
-        String firstName;
+        String firstName, name;
         Date bDay;
         Clasa clasa;
         Professor teacher;
@@ -36,8 +42,17 @@ public class Sistem {
         Scanner scanner = new Scanner(System.in);
         WriteCSV writeCSV = WriteCSV.getInstance();
         LogCSV logCSV = LogCSV.getInstance();
+
         ClasaService clasaService = ClasaService.getInstance();
+        StudentService studentService = new StudentService();
+        ProfessorService professorService = new ProfessorService();
         ManagerService managerService = ManagerService.getInstance();
+        GradeService gradeService = new GradeService();
+        SubjectRepository subjectRepository = new SubjectRepository();
+
+
+        SetupData setupData = new SetupData();
+        setupData.setup();
 
         while (true) {
             System.out.println("Choose an option:");
@@ -46,11 +61,17 @@ public class Sistem {
             System.out.println("3) Add a new teacher");
             System.out.println("4) Add a grade");
             System.out.println("5) Show the students from a class");
-            System.out.println("6) Show the list of all teachers");
+            System.out.println("6) Show all teachers");
             System.out.println("7) Show subjects for a class");
             System.out.println("8) Show grades for a student");
             System.out.println("9) Show all grades for a student");
             System.out.println("10) Show all classes");
+            System.out.println("11) Delete a class");
+            System.out.println("12) Delete a student");
+            System.out.println("13) Delete a professor");
+            System.out.println("14) Add subject");
+            System.out.println("15) Add subject for a professor");
+
 
             System.out.println("\nEnter your option ");
             chosen = scanner.nextInt();
@@ -61,6 +82,7 @@ public class Sistem {
                     System.out.println("     ----- Add a new class -----");
                     clasa = readClasa();
                     managerService.addClasa(manager, clasa);
+                    clasaService.add(clasa);
                     LogCSV.Log("Add a new class");
                     break;
                 case 2:
@@ -75,6 +97,8 @@ public class Sistem {
                     System.out.println("Enter the class where you want to add the user:");
                     clasa = readClasa();
                     student = new Student(lastName, firstName, bDay, clasa);
+                    studentService.add(student);
+
                     manager.getClasa(clasa).addStudent(student);
                     LogCSV.Log("Add a new student");
                     break;
@@ -90,6 +114,7 @@ public class Sistem {
                     System.out.println("Enter the salary: ");
                     salary = scanner.nextInt();
                     teacher = new Professor(lastName, firstName, bDay, salary);
+                    professorService.add(teacher);
                     managerService.addProfessor(manager, teacher);
                     LogCSV.Log("Add a new teacher");
                     break;
@@ -100,16 +125,15 @@ public class Sistem {
                     lastName = scanner.next();
                     System.out.println("Enter the first name:");
                     firstName = scanner.next();
-                    clasa = readClasa();
                     System.out.println("Enter the subject:");
-                    AllSubjects subj = AllSubjects.valueOf(scanner.next());
+                    String subj = scanner.next();
                     System.out.println("Enter the grade:");
                     grade = scanner.nextInt();
                     nota = grade;
-
-                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
-                    clasaService.addGrade(manager.getClasa(clasa), student, subj, nota);
-                    clasaService.showGrades(manager.getClasa(clasa), student);
+                    gradeService.addGrade(lastName, firstName, subj, grade);
+//                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
+//                    clasaService.addGrade(manager.getClasa(clasa), student, subj, nota);
+//                    clasaService.showGrades(manager.getClasa(clasa), student);
                     LogCSV.Log("Add grade");
                     break;
 
@@ -117,14 +141,22 @@ public class Sistem {
                     System.out.println("     ----- Show Students -----");
                     clasa = readClasa();
                     System.out.println("The students are:");
-                    clasaService.showStudents(manager.getClasa(clasa));
+
+                    for (Student student1 : clasaService.getAllStudents(clasa))
+                        System.out.println(student1);
+//                    clasaService.showStudents(manager.getClasa(clasa));
                     LogCSV.Log("Show students");
                     break;
 
                 case 6:
                     System.out.println("     ----- Show Teachers -----");
                     System.out.println("List of professors:");
-                    manager.showProfessors();
+                    List<Professor> professorList = professorService.getAll();
+                    for(Professor professor : professorList) {
+                        System.out.println(professor);
+                    }
+                    System.out.println();
+//                    manager.showProfessors();
                     LogCSV.Log("Show teachers");
                     break;
 
@@ -160,20 +192,51 @@ public class Sistem {
                     student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
                     manager.getClasa(clasa).getCatalog().showAllGrades(student);
                     LogCSV.Log("Show all graders for a student");
-
                     break;
 
                 case 10:
                     System.out.println("All classes:");
                     int index = 1;
-                    for (Clasa elem : manager.getClasses()) {
+                    for (Clasa elem : clasaService.getAll()) {
                         System.out.println(index + ") " + elem);
                         index++;
                     }
                     System.out.println();
                     LogCSV.Log("Show all classes");
-
                     break;
+
+                case 11:
+                    System.out.println("     ----- Remove a class -----");
+                    clasa = readClasa();
+                    clasaService.delete(clasa);
+                    LogCSV.Log("Delete a class");
+                    break;
+                case 12:
+                    System.out.println("     ----- Remove a student -----");
+                    System.out.println("Enter the last name: ");
+                    lastName = scanner.next();
+                    System.out.println("Enter the first name: ");
+                    firstName = scanner.next();
+                    studentService.delete(lastName, firstName);
+                    break;
+
+                case 13:
+                    System.out.println("     ----- Remove a professor -----");
+                    System.out.println("Enter the last name: ");
+                    lastName = scanner.next();
+                    System.out.println("Enter the first name: ");
+                    firstName = scanner.next();
+                    professorService.delete(lastName, firstName);
+                    break;
+
+                case 14 :
+                    System.out.println("     ----- Add a new subject -----");
+                    System.out.println("Enter the name ");
+                    name = scanner.next();
+                    subjectRepository.save(name);
+                    break;
+
+                case 15:
 
                 default:
                     writeCSV.writeClase();
@@ -186,7 +249,6 @@ public class Sistem {
             catch (Exception e) {
                 System.out.println("Invalid input, try again");
             }
-
         }
     }
     void initValues (Manager manager) {

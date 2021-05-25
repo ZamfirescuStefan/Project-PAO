@@ -9,6 +9,15 @@ public class Student extends Person {
         super(iFirstName, iLastName, iBirthDate);
         this.clasa = iClasa;
         clasa.addStudent(this);
+
+    }
+
+    public Clasa getClasa() {
+        return clasa;
+    }
+
+    public void setClasa(Clasa clasa) {
+        this.clasa = clasa;
     }
 
     @Override

@@ -1,13 +1,47 @@
 package Catalog;
 
+import Catalog.Database.Repository.ClassRepository;
+import Catalog.Database.Repository.StudentRepository;
+
+import java.util.List;
+
 public class ClasaService {
     public static ClasaService instance = null;
+    private ClassRepository repository = new ClassRepository();
+    private StudentRepository studentRepository = new StudentRepository();
+
+    public void add (Clasa clasa){
+        if (clasa.getId() != null && clasa.getName() != null) {
+            repository.save(clasa);
+        }
+        else
+            throw new RuntimeException("Bad request!");
+    }
+
+    public List<Clasa> getAll() {
+        return  repository.findAll();
+    }
+
+    public void delete (Clasa clasa) {
+        if (clasa.getId() != null && clasa.getName() != null) {
+            repository.remove(clasa);
+        }
+        else
+            throw new RuntimeException("Bad request!");
+    }
     public static ClasaService getInstance() {
         if (instance == null)
             instance = new ClasaService();
         return instance;
     }
 
+    public List<Student> getAllStudents(Clasa iClasa) {
+        if (iClasa.getName() != null ) {
+            return studentRepository.getAllStudentsFromAClass(iClasa);
+        }
+        else
+            throw new RuntimeException("Bad request!");
+    }
     public void showStudents(Clasa cls) {
         int index = 1;
         for (Student student : cls.getStudents()) {
