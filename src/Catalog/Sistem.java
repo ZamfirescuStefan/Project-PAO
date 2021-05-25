@@ -3,6 +3,7 @@ package Catalog;
 import Catalog.Database.Config.SetupData;
 import Catalog.Database.Repository.ProfessorRepository;
 import Catalog.Database.Repository.StudentRepository;
+import Catalog.Database.Repository.SubjectProjessorRepository;
 import Catalog.Database.Repository.SubjectRepository;
 
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class Sistem {
         ManagerService managerService = ManagerService.getInstance();
         GradeService gradeService = new GradeService();
         SubjectRepository subjectRepository = new SubjectRepository();
+        SubjectProjessorRepository subjectProjessorRepository = new SubjectProjessorRepository();
 
 
         SetupData setupData = new SetupData();
@@ -62,15 +64,14 @@ public class Sistem {
             System.out.println("4) Add a grade");
             System.out.println("5) Show the students from a class");
             System.out.println("6) Show all teachers");
-            System.out.println("7) Show subjects for a class");
+            System.out.println("7) Show subjects");
             System.out.println("8) Show grades for a student");
-            System.out.println("9) Show all grades for a student");
+            System.out.println("9) Add a subject");
             System.out.println("10) Show all classes");
             System.out.println("11) Delete a class");
             System.out.println("12) Delete a student");
             System.out.println("13) Delete a professor");
-            System.out.println("14) Add subject");
-            System.out.println("15) Add subject for a professor");
+            System.out.println("14) Assign a subject for a professor");
 
 
             System.out.println("\nEnter your option ");
@@ -162,10 +163,13 @@ public class Sistem {
 
                 case 7:
                     System.out.println("     ----- Show Subjects ------");
-                    clasa = readClasa();
-                    clasaService.showSubjects(manager.getClasa(clasa));
+                    int index = 1;
+                    for (String subject : subjectRepository.findAll()) {
+                        System.out.println(index + ") " + subject);
+                        index += 1;
+                    }
+//                    clasaService.showSubjects(manager.getClasa(clasa));
                     LogCSV.Log("Show subjects");
-
                     break;
 
                 case 8:
@@ -175,31 +179,32 @@ public class Sistem {
                     System.out.println("Enter the first name:");
                     firstName = scanner.next();
                     clasa = readClasa();
+                    System.out.println("Enter the subject:");
+                    String subject = scanner.next();
                     student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
-                    clasaService.showGrades(manager.getClasa(clasa), student);
+//                    clasaService.showGrades(manager.getClasa(clasa), student);
+                    System.out.println(subject + " notes");
+                    for (Integer elem : gradeService.showGrades(student, subject)) {
+                        System.out.print(elem + ", ");
+                    }
+                    System.out.println();
                     LogCSV.Log("Show grades for a student");
-
                     break;
 
                 case 9:
-                    System.out.println("     ----- Show all grades for a student -----");
-
-                    System.out.println("Enter the last name for the student");
-                    lastName = scanner.next();
-                    System.out.println("Enter the first name for the student");
-                    firstName = scanner.next();
-                    clasa = readClasa();
-                    student = clasaService.getStudent(manager.getClasa(clasa), lastName, firstName);
-                    manager.getClasa(clasa).getCatalog().showAllGrades(student);
-                    LogCSV.Log("Show all graders for a student");
+                    System.out.println("     ----- Add a new subject -----");
+                    System.out.println("Enter the name ");
+                    name = scanner.next();
+                    subjectRepository.save(name);
                     break;
+
 
                 case 10:
                     System.out.println("All classes:");
-                    int index = 1;
+                    int index_cls = 1;
                     for (Clasa elem : clasaService.getAll()) {
-                        System.out.println(index + ") " + elem);
-                        index++;
+                        System.out.println(index_cls + ") " + elem);
+                        index_cls++;
                     }
                     System.out.println();
                     LogCSV.Log("Show all classes");
@@ -211,6 +216,7 @@ public class Sistem {
                     clasaService.delete(clasa);
                     LogCSV.Log("Delete a class");
                     break;
+
                 case 12:
                     System.out.println("     ----- Remove a student -----");
                     System.out.println("Enter the last name: ");
@@ -230,13 +236,14 @@ public class Sistem {
                     break;
 
                 case 14 :
-                    System.out.println("     ----- Add a new subject -----");
-                    System.out.println("Enter the name ");
-                    name = scanner.next();
-                    subjectRepository.save(name);
-                    break;
-
-                case 15:
+                    System.out.println("     ----- Assign a subject for a professor -----");
+                    System.out.println("Enter the last name:");
+                    lastName = scanner.next();
+                    System.out.println("Enter the first name: ");
+                    firstName = scanner.next();
+                    System.out.println("Enter the subject name: ");
+                    subject = scanner.next();
+                    subjectProjessorRepository.save(lastName, firstName, subject);
 
                 default:
                     writeCSV.writeClase();

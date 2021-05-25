@@ -34,7 +34,7 @@ public class SubjectRepository {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                students.add(resultSet.getString(1));
+                students.add(resultSet.getString(2));
             }
             resultSet.close();
             return students;
